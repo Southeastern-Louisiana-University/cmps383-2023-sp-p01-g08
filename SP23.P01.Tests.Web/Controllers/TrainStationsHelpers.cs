@@ -7,7 +7,7 @@ namespace SP23.P01.Tests.Web.Controllers;
 
 internal static class TrainStationsHelpers
 {
-    internal static async Task<IAsyncDisposable?> CreateTrainStation(this HttpClient webClient, TrainStationDto request)
+    internal static async Task<IAsyncDisposable?> CreateTrainStation(this HttpClient webClient, TrainStation request)
     {
         try
         {
@@ -22,7 +22,7 @@ internal static class TrainStationsHelpers
         }
     }
 
-    internal static async Task<List<TrainStationDto>?> GetTrainStations(this HttpClient webClient)
+    internal static async Task<List<TrainStation>?> GetTrainStations(this HttpClient webClient)
     {
         try
         {
@@ -36,7 +36,7 @@ internal static class TrainStationsHelpers
         }
     }
 
-    internal static async Task<TrainStationDto?> GetTrainStation(this HttpClient webClient)
+    internal static async Task<TrainStation?> GetTrainStation(this HttpClient webClient)
     {
         try
         {
@@ -50,15 +50,15 @@ internal static class TrainStationsHelpers
         }
     }
 
-    internal static async Task AssertTrainStationUpdateFunctions(this HttpResponseMessage httpResponse, TrainStationDto request, HttpClient webClient)
+    internal static async Task AssertTrainStationUpdateFunctions(this HttpResponseMessage httpResponse, TrainStation request, HttpClient webClient)
     {
         httpResponse.StatusCode.Should().Be(HttpStatusCode.OK, "we expect an HTTP 200 when calling PUT /api/stations/{id} with valid data to update a station");
-        var resultDto = await httpResponse.Content.ReadAsJsonAsync<TrainStationDto>();
+        var resultDto = await httpResponse.Content.ReadAsJsonAsync<TrainStation>();
         resultDto.Should().BeEquivalentTo(request, "We expect the update station endpoint to return the result");
 
         var getByIdResult = await webClient.GetAsync($"/api/stations/{request.Id}");
         getByIdResult.StatusCode.Should().Be(HttpStatusCode.OK, "we should be able to get the updated station by id");
-        var dtoById = await getByIdResult.Content.ReadAsJsonAsync<TrainStationDto>();
+        var dtoById = await getByIdResult.Content.ReadAsJsonAsync<TrainStation>();
         dtoById.Should().BeEquivalentTo(request, "we expect the same result to be returned by an update station call as what you'd get from get station by id");
 
         var getAllRequest = await webClient.GetAsync("/api/stations");
@@ -71,11 +71,11 @@ internal static class TrainStationsHelpers
         matchingItem[0].Should().BeEquivalentTo(request, "we expect the same result to be returned by a updated station as what you'd get from get getting all stations");
     }
 
-    internal static async Task<TrainStationDto> AssertCreateTrainStationFunctions(this HttpResponseMessage httpResponse, TrainStationDto request, HttpClient webClient)
+    internal static async Task<TrainStation> AssertCreateTrainStationFunctions(this HttpResponseMessage httpResponse, TrainStation request, HttpClient webClient)
     {
         httpResponse.StatusCode.Should().Be(HttpStatusCode.Created, "we expect an HTTP 201 when calling POST /api/stations with valid data to create a new station");
 
-        var resultDto = await httpResponse.Content.ReadAsJsonAsync<TrainStationDto>();
+        var resultDto = await httpResponse.Content.ReadAsJsonAsync<TrainStation>();
         Assert.IsNotNull(resultDto, "We expect json data when calling POST /api/stations");
 
         resultDto.Id.Should().BeGreaterOrEqualTo(1, "we expect a newly created station to return with a positive Id");
@@ -86,7 +86,7 @@ internal static class TrainStationsHelpers
 
         var getByIdResult = await webClient.GetAsync($"/api/stations/{resultDto.Id}");
         getByIdResult.StatusCode.Should().Be(HttpStatusCode.OK, "we should be able to get the newly created station by id");
-        var dtoById = await getByIdResult.Content.ReadAsJsonAsync<TrainStationDto>();
+        var dtoById = await getByIdResult.Content.ReadAsJsonAsync<TrainStation>();
         dtoById.Should().BeEquivalentTo(resultDto, "we expect the same result to be returned by a create station as what you'd get from get station by id");
 
         var getAllRequest = await webClient.GetAsync("/api/stations");
@@ -101,10 +101,10 @@ internal static class TrainStationsHelpers
         return resultDto;
     }
 
-    internal static async Task<List<TrainStationDto>> AssertTrainStationListAllFunctions(this HttpResponseMessage httpResponse)
+    internal static async Task<List<TrainStation>> AssertTrainStationListAllFunctions(this HttpResponseMessage httpResponse)
     {
         httpResponse.StatusCode.Should().Be(HttpStatusCode.OK, "we expect an HTTP 200 when calling GET /api/stations");
-        var resultDto = await httpResponse.Content.ReadAsJsonAsync<List<TrainStationDto>>();
+        var resultDto = await httpResponse.Content.ReadAsJsonAsync<List<TrainStation>>();
         Assert.IsNotNull(resultDto, "We expect json data when calling GET /api/stations");
         resultDto.Should().HaveCountGreaterThan(2, "we expect at least 3 stations when calling GET /api/stations");
         resultDto.All(x => !string.IsNullOrWhiteSpace(x.Name)).Should().BeTrue("we expect all stations to have names");
@@ -116,10 +116,10 @@ internal static class TrainStationsHelpers
 
     private sealed class DeleteTrainStation : IAsyncDisposable
     {
-        private readonly TrainStationDto request;
+        private readonly TrainStation request;
         private readonly HttpClient webClient;
 
-        public DeleteTrainStation(TrainStationDto request, HttpClient webClient)
+        public DeleteTrainStation(TrainStation request, HttpClient webClient)
         {
             this.request = request;
             this.webClient = webClient;

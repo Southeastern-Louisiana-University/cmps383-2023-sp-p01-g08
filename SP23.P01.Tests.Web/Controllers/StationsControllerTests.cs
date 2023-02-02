@@ -52,7 +52,7 @@ public class StationsControllerTests
 
         //assert
         httpResponse.StatusCode.Should().Be(HttpStatusCode.OK, "we expect an HTTP 200 when calling GET /api/stations/{id} ");
-        var resultDto = await httpResponse.Content.ReadAsJsonAsync<TrainStationDto>();
+        var resultDto = await httpResponse.Content.ReadAsJsonAsync<TrainStation>();
         resultDto.Should().BeEquivalentTo(target, "we expect get product by id to return the same data as the list all product endpoint");
     }
 
@@ -74,7 +74,7 @@ public class StationsControllerTests
     {
         //arrange
         var webClient = context.GetStandardWebClient();
-        var request = new TrainStationDto
+        var request = new TrainStation
         {
             Address = "asd",
         };
@@ -91,7 +91,7 @@ public class StationsControllerTests
     {
         //arrange
         var webClient = context.GetStandardWebClient();
-        var request = new TrainStationDto
+        var request = new TrainStation
         {
             Name = "a".PadLeft(121, '0'),
             Address = "asd",
@@ -115,7 +115,7 @@ public class StationsControllerTests
             Assert.Fail("You are not ready for this test");
             return;
         }
-        var request = new TrainStationDto
+        var request = new TrainStation
         {
             Name = "asd",
         };
@@ -132,7 +132,7 @@ public class StationsControllerTests
     {
         //arrange
         var webClient = context.GetStandardWebClient();
-        var request = new TrainStationDto
+        var request = new TrainStation
         {
             Name = "a",
             Address = "asd",
@@ -150,7 +150,7 @@ public class StationsControllerTests
     {
         //arrange
         var webClient = context.GetStandardWebClient();
-        var request = new TrainStationDto
+        var request = new TrainStation
         {
             Name = "a",
             Address = "desc",
@@ -175,7 +175,7 @@ public class StationsControllerTests
     {
         //arrange
         var webClient = context.GetStandardWebClient();
-        var request = new TrainStationDto
+        var request = new TrainStation
         {
             Name = "a",
             Address = "desc",
@@ -200,7 +200,7 @@ public class StationsControllerTests
     {
         //arrange
         var webClient = context.GetStandardWebClient();
-        var request = new TrainStationDto
+        var request = new TrainStation
         {
             Name = "a",
             Address = "desc",
@@ -225,7 +225,7 @@ public class StationsControllerTests
     {
         //arrange
         var webClient = context.GetStandardWebClient();
-        var request = new TrainStationDto
+        var request = new TrainStation
         {
             Name = "a",
             Address = "desc",
@@ -250,7 +250,7 @@ public class StationsControllerTests
     {
         //arrange
         var webClient = context.GetStandardWebClient();
-        var request = new TrainStationDto
+        var request = new TrainStation
         {
             Address = "asd",
             Name = "asd"
@@ -274,7 +274,7 @@ public class StationsControllerTests
     {
         //arrange
         var webClient = context.GetStandardWebClient();
-        var request = new TrainStationDto
+        var request = new TrainStation
         {
             Address = "asd",
             Name = "asd",
@@ -298,7 +298,7 @@ public class StationsControllerTests
     {
         //arrange
         var webClient = context.GetStandardWebClient();
-        var request = new TrainStationDto
+        var request = new TrainStation
         {
             Address = "asd",
             Name = "asd",
